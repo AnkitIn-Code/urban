@@ -39,7 +39,9 @@ export const initializeNotificationSocket = (httpServer) => {
         if (isAllowedOrigin(origin)) return callback(null, true);
         return callback(new Error("Origin not allowed"));
       },
+      credentials: true,
     },
+    transports: ["websocket", "polling"],
   });
 
   io.use(authenticateSocket);

@@ -1,4 +1,16 @@
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
+const rawApiUrl =
+  (import.meta.env.VITE_API_URL as string | undefined) ||
+  (import.meta.env.VITE_API_BASE_URL as string | undefined) ||
+  "";
+
+// Ensure no trailing slash so ${API_BASE}${path} concatenates cleanly
+const API_BASE = rawApiUrl.trim().replace(/\/+$/, "");
+
+const getEndpointUrl = (path: string) => {
+  if (!API_BASE) return path;
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  return `${API_BASE}${normalizedPath}`;
+};
 
 type UnauthorizedCallback = () => void;
 let unauthorizedCallback: UnauthorizedCallback | null = null;
@@ -106,7 +118,7 @@ const request = async (path: string, init: RequestInit = {}, options: RequestOpt
   }
 
   try {
-    res = await fetch(`${API_BASE}${path}`, {
+    res = await fetch(getEndpointUrl(path), {
       ...init,
       signal: controller.signal,
       headers: requestHeaders,

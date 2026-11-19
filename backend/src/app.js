@@ -35,6 +35,7 @@ app.use(cors({
     if (isAllowedOrigin(origin)) return callback(null, true);
     return callback(new Error("Origin not allowed"));
   },
+  credentials: true,
 }));
 app.use(express.json());
 app.use(morgan("dev"));

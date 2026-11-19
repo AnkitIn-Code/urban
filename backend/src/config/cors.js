@@ -9,9 +9,21 @@ const defaultOrigins = [
   "http://127.0.0.1:8081",
 ];
 
-export const allowedOrigins = (process.env.FRONTEND_ORIGINS || defaultOrigins.join(","))
-  .split(",")
-  .map((origin) => origin.trim())
+const envOrigins = [
+  process.env.FRONTEND_ORIGINS,
+  process.env.FRONTEND_URL,
+  process.env.CLIENT_URL,
+]
+  .filter(Boolean)
+  .flatMap((val) => val.split(","))
+  .map((origin) => origin.trim().replace(/\/+$/, ""))
   .filter(Boolean);
 
-export const isAllowedOrigin = (origin) => !origin || allowedOrigins.includes(origin);
+export const allowedOrigins = envOrigins.length > 0 ? envOrigins : defaultOrigins;
+
+export const isAllowedOrigin = (origin) => {
+  if (!origin) return true;
+  const cleanOrigin = origin.trim().replace(/\/+$/, "");
+  if (allowedOrigins.includes("*")) return true;
+  return allowedOrigins.includes(cleanOrigin);
+};

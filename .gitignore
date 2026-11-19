@@ -1,15 +1,36 @@
-# Environment & secret configurations
+# ==============================================================================
+# Git Ignore Configuration
+# ==============================================================================
+
+# Environment files and secrets
 .env
 .env.*
 !.env.example
+*.local.json
+password-hashes-backup-*.json
+
+# Backend
 backend/.env
 backend/.env.*
 !backend/.env.example
+backend/uploads/
+backend/backups/
+backend/node_modules/
+
+# Frontend
 frontend/.env
 frontend/.env.*
 !frontend/.env.example
 frontend/.env.development.local
+frontend/node_modules/
+frontend/dist/
+frontend/*.tsbuildinfo
+frontend/.codex
 
-# Evidence uploads
-uploads/
-backend/uploads/
+# Node and OS artifacts
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+Thumbs.db

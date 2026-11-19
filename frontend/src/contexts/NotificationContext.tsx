@@ -133,7 +133,16 @@ interface NotificationContextValue {
 
 const NotificationContext = createContext<NotificationContextValue | null>(null);
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+const rawSocketUrl =
+  (import.meta.env.VITE_API_URL as string | undefined) ||
+  (import.meta.env.VITE_API_BASE_URL as string | undefined) ||
+  "";
+
+const API_BASE_URL = rawSocketUrl
+  ? rawSocketUrl.trim().replace(/\/+$/, "")
+  : import.meta.env.DEV
+    ? "http://localhost:5000"
+    : "";
 
 const getNotificationMeta = (item: ApiNotification) => (
   item.meta && typeof item.meta === "object" ? item.meta : {}
@@ -331,8 +340,8 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     }
 
     if (!socketRef.current) {
-      socketRef.current = io(API_BASE_URL, {
-        transports: ["websocket"],
+      socketRef.current = io(API_BASE_URL || undefined, {
+        transports: ["websocket", "polling"],
         auth: { token: localStorage.getItem("govai_token") },
         autoConnect: true,
       });
