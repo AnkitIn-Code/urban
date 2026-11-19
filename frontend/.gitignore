@@ -10,10 +10,4 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
-*.local
-*.local.json
-*.local.ts
-.env.development.local
-.env.local
-demo-credentials.local.json
 

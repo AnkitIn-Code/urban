@@ -1,7 +1,4 @@
 node_modules/
-*.local
-*.local.json
 .env
-demo-credentials.local.json
 uploads/
 
